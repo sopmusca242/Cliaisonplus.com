@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel d'Administration - Cabinet Liaison Plus Consulting</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .admin-container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .sidebar {
+            width: 250px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 20px;
+            color: white;
+        }
+
+        .sidebar h2 {
+            margin-bottom: 30px;
+            text-align: center;
+            font-size: 1.5rem;
+            color: #fff;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 15px 20px;
+            margin-bottom: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            text-align: left;
+            font-size: 14px;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background: rgba(255, 255, 255, 0.2);
+            transform: translateX(5px);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 30px;
+            overflow-y: auto;
+        }
+
+        .content-section {
+            display: none;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+        }
+
+        .content-section.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .section-title {
+            font-size: 2rem;
+            color: #333;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #555;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e1e5e9;
+            border-radius: 10px;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea.form-control {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        .btn {
+            padding: 12px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ff4757 100%);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #2ed573 0%, #1e90ff 100%);
+        }
+
+        .team-member, .news-item, .sector-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+        }
+
+        .row {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .col {
+            flex: 1;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 15px;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .preview-image {
+            max-width: 150px;
+            max-height: 150px;
+            object-fit: cover;
+            border-radius: 10px;
+            margin-top: 10px;
+        }
+
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            padding: 15px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .dashboard-welcome {
+            text-align: center;
+            padding: 50px 20px;
+        }
+
+        .dashboard-welcome h1 {
+            font-size: 3rem;
+            color: #333;
+            margin-bottom: 20px;
+        }
+
+        .dashboard-welcome p {
+            font-size: 1.2rem;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 768px) {
+            .admin-container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 15px;
+            }
+
+            .row {
+                flex-direction: column;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="admin-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <h2>Admin Panel</h2>
+            <button class="menu-item active" onclick="showSection('dashboard')">
+                📊 Tableau de bord
+            </button>
+            <button class="menu-item" onclick="showSection('general')">
+                🏢 Informations générales
+            </button>
+            <button class="menu-item" onclick="showSection('sectors')">
+                🏭 Secteurs d'activité
+            </button>
+            <button class="menu-item" onclick="showSection('team')">
+                👥 Équipe
+            </button>
+            <button class="menu-item" onclick="showSection('news')">
+                📰 Actualités
+            </button>
+            <button class="menu-item" onclick="showSection('contact')">
+                📞 Contact
+            </button>
+            <button class="menu-item" onclick="showSection('settings')">
+                ⚙️ Paramètres
+            </button>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard -->
+            <div id="dashboard" class="content-section active">
+                <div class="dashboard-welcome">
+                    <h1>Bienvenue dans votre panel d'administration</h1>
+                    <p>Gérez facilement le contenu de votre site Cabinet Liaison Plus Consulting</p>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">6</div>
+                        <div>Secteurs d'activité</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">6</div>
+                        <div>Membres de l'équipe</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">3</div>
+                        <div>Articles publiés</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">100%</div>
+                        <div>Taux de satisfaction</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Informations générales -->
+            <div id="general" class="content-section">
+                <h2 class="section-title">Informations générales</h2>
+                <div class="success-message" id="general-success">
+                    Les informations ont été mises à jour avec succès !
+                </div>
+                
+                <form onsubmit="saveGeneral(event)">
+                    <div class="form-group">
+                        <label>Nom du cabinet</label>
+                        <input type="text" class="form-control" value="Cabinet Liaison Plus Consulting" name="company_name">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Slogan principal</label>
+                        <input type="text" class="form-control" value="L'excellence au service de votre performance financière et juridique" name="main_slogan">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description principale</label>
+                        <textarea class="form-control" name="main_description">Dans un environnement économique en constante évolution, l'ambition du CABINET LIAISON PLUS CONSULTING est d'offrir un accompagnement professionnel et personnalisé aux entreprises et investisseurs souhaitant optimiser leur gestion fiscale, sécuriser leurs opérations juridiques et renforcer leur transparence financière au Congo Brazzaville ainsi que dans l'ensemble de la sous-région francophone.</textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description secondaire</label>
+                        <textarea class="form-control" name="secondary_description">Grâce à notre expertise reconnue en conseil fiscal, conseil juridique et audit financier, et fort de notre réseau de partenaires stratégiques tant dans le secteur privé que public, CABINET LIAISON PLUS CONSULTING propose aux entreprises des solutions sur mesure, efficaces et compétitives pour la réussite de leurs projets et la sécurisation de leurs investissements.</textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Sauvegarder</button>
+                </form>
+            </div>
+
+            <!-- Secteurs -->
+            <div id="sectors" class="content-section">
+                <h2 class="section-title">Secteurs d'activité</h2>
+                <div class="success-message" id="sectors-success">
+                    Les secteurs ont été mis à jour avec succès !
+                </div>
+
+                <div id="sectors-container">
+                    <!-- Secteur Énergie -->
+                    <div class="sector-item">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Nom du secteur</label>
+                                    <input type="text" class="form-control" value="Énergie">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Image</label>
+                                    <input type="file" class="form-control" accept="image/*" onchange="previewImage(this)">
+                                    <img src="#" class="preview-image" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control">Nous aidons les entreprises de l'énergie à optimiser leurs investissements, sécuriser leurs activités et renforcer leur conformité et leur rentabilité.</textarea>
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="removeSector(this)">Supprimer</button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn" onclick="addSector()">Ajouter un secteur</button>
+                <button type="button" class="btn btn-success" onclick="saveSectors()">Sauvegarder tous</button>
+            </div>
+
+            <!-- Équipe -->
+            <div id="team" class="content-section">
+                <h2 class="section-title">Gestion de l'équipe</h2>
+                <div class="success-message" id="team-success">
+                    L'équipe a été mise à jour avec succès !
+                </div>
+
+                <div id="team-container">
+                    <!-- Membre 1 -->
+                    <div class="team-member">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Nom complet</label>
+                                    <input type="text" class="form-control" value="Emmanuel Francis BANIETIKA">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Poste</label>
+                                    <input type="text" class="form-control" value="Fondateur">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Spécialité</label>
+                                    <input type="text" class="form-control" value="Conseil juridique et fiscal">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Photo</label>
+                                    <input type="file" class="form-control" accept="image/*" onchange="previewImage(this)">
+                                    <img src="#" class="preview-image" style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control">Expert en conseil juridique et fiscal avec plus de 15 ans d'expérience dans l'accompagnement des entreprises.</textarea>
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="removeMember(this)">Supprimer</button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn" onclick="addTeamMember()">Ajouter un membre</button>
+                <button type="button" class="btn btn-success" onclick="saveTeam()">Sauvegarder l'équipe</button>
+            </div>
+
+            <!-- Actualités -->
+            <div id="news" class="content-section">
+                <h2 class="section-title">Gestion des actualités</h2>
+                <div class="success-message" id="news-success">
+                    Les actualités ont été mises à jour avec succès !
+                </div>
+
+                <div id="news-container">
+                    <!-- Article 1 -->
+                    <div class="news-item">
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Titre</label>
+                                    <input type="text" class="form-control" value="L'Intelligence Artificielle Révolutionne le Secteur de la Santé">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Catégorie</label>
+                                    <select class="form-control">
+                                        <option>Technologie</option>
+                                        <option>Business</option>
+                                        <option>Sport</option>
+                                        <option>Économie</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Auteur</label>
+                                    <input type="text" class="form-control" value="Marie Dubois">
+                                </div>
+                            </div>
+                            <div class="col">
+                                <div class="form-group">
+                                    <label>Date</label>
+                                    <input type="date" class="form-control" value="2025-08-17">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label>Extrait</label>
+                            <textarea class="form-control">Les dernières avancées en intelligence artificielle permettent désormais un diagnostic médical plus précis et rapide que jamais...</textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>Image</label>
+                            <input type="file" class="form-control" accept="image/*" onchange="previewImage(this)">
+                            <img src="#" class="preview-image" style="display: none;">
+                        </div>
+                        <button type="button" class="btn btn-danger" onclick="removeNews(this)">Supprimer</button>
+                    </div>
+                </div>
+
+                <button type="button" class="btn" onclick="addNews()">Ajouter un article</button>
+                <button type="button" class="btn btn-success" onclick="saveNews()">Sauvegarder tous</button>
+            </div>
+
+            <!-- Contact -->
+            <div id="contact" class="content-section">
+                <h2 class="section-title">Informations de contact</h2>
+                <div class="success-message" id="contact-success">
+                    Les informations de contact ont été mises à jour !
+                </div>
+
+                <form onsubmit="saveContact(event)">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Adresse</label>
+                                <textarea class="form-control">131 rue Massoukou, Moungalie, Brazzaville, République du Congo</textarea>
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Téléphone</label>
+                                <input type="text" class="form-control" value="+242-06-800-54-49">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Email</label>
+                                <input type="email" class="form-control" value="LinkByte.cg@gmail.com">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Lien Google Maps</label>
+                                <input type="url" class="form-control" placeholder="URL de la carte Google Maps">
+                            </div>
+                        </div>
+                    </div>
+
+                    <h4 style="margin: 30px 0 20px 0;">Réseaux sociaux</h4>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Facebook</label>
+                                <input type="url" class="form-control" placeholder="URL Facebook">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Twitter</label>
+                                <input type="url" class="form-control" placeholder="URL Twitter">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Instagram</label>
+                                <input type="url" class="form-control" placeholder="URL Instagram">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>LinkedIn</label>
+                                <input type="url" class="form-control" placeholder="URL LinkedIn">
+                            </div>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn">Sauvegarder</button>
+                </form>
+            </div>
+
+            <!-- Paramètres -->
+            <div id="settings" class="content-section">
+                <h2 class="section-title">Paramètres du site</h2>
+                <div class="success-message" id="settings-success">
+                    Les paramètres ont été sauvegardés !
+                </div>
+
+                <form onsubmit="saveSettings(event)">
+                    <div class="form-group">
+                        <label>Couleur principale</label>
+                        <input type="color" class="form-control" value="#667eea">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Logo du site</label>
+                        <input type="file" class="form-control" accept="image/*" onchange="previewImage(this)">
+                        <img src="#" class="preview-image" style="display: none;">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Favicon</label>
+                        <input type="file" class="form-control" accept="image/*">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Titre SEO</label>
+                        <input type="text" class="form-control" value="Cabinet Liaison Plus Consulting - Expert juridique et fiscal">
+                    </div>
+
+                    <div class="form-group">
+                        <label>Description SEO</label>
+                        <textarea class="form-control">Expert en conseil juridique et fiscal au Congo Brazzaville. Accompagnement professionnel pour entreprises et investisseurs.</textarea>
+                    </div>
+
+                    <button type="submit" class="btn">Sauvegarder</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variables globales pour stockage des données
+        let siteData = {
+            general: {},
+            sectors: [],
+            team: [],
+            news: [],
+            contact: {},
+            settings: {}
+        };
+
+        // Fonction pour changer de section
+        function showSection(sectionName) {
+            // Masquer toutes les sections
+            const sections = document.querySelectorAll('.content-section');
+            sections.forEach(section => section.classList.remove('active'));
+            
+            // Afficher la section sélectionnée
+            document.getElementById(sectionName).classList.add('active');
+            
+            // Mettre à jour le menu actif
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        // Fonctions pour les images
+        function previewImage(input) {
+            const file = input.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const img = input.parentElement.querySelector('.preview-image');
+                    img.src = e.target.result;
+                    img.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        // Fonctions pour les secteurs
+        function addSector() {
+            const container = document.getElementById('sectors-container');
+            const sectorHtml = `
+                <div class="sector-item">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Nom du secteur</label>
+                                <input type="text" class="form-control" placeholder="Nom du secteur">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Image</label>
+                                <input type="file" class="form-control" accept="image/*" onchange="previewImage(this)">
+                                <img src="#" class="preview-image" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" placeholder="Description du secteur"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger" onclick="removeSector(this)">Supprimer</button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', sectorHtml);
+        }
+
+        function removeSector(btn) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce secteur ?')) {
+                btn.parentElement.remove();
+            }
+        }
+
+        // Fonctions pour l'équipe
+        function addTeamMember() {
+            const container = document.getElementById('team-container');
+            const memberHtml = `
+                <div class="team-member">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Nom complet</label>
+                                <input type="text" class="form-control" placeholder="Nom complet">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Poste</label>
+                                <input type="text" class="form-control" placeholder="Poste">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Spécialité</label>
+                                <input type="text" class="form-control" placeholder="Spécialité">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Photo</label>
+                                <input type="file" class="form-control" accept="image/*" onchange="previewImage(this)">
+                                <img src="#" class="preview-image" style="display: none;">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Description</label>
+                        <textarea class="form-control" placeholder="Description du membre"></textarea>
+                    </div>
+                    <button type="button" class="btn btn-danger" onclick="removeMember(this)">Supprimer</button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', memberHtml);
+        }
+
+        function removeMember(btn) {
+            if (confirm('Êtes-vous sûr de vouloir supprimer ce membre ?')) {
+                btn.parentElement.remove();
+            }
+        }
+
+        // Fonctions pour les actualités
+        function addNews() {
+            const container = document.getElementById('news-container');
+            const newsHtml = `
+                <div class="news-item">
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Titre</label>
+                                <input type="text" class="form-control" placeholder="Titre de l'article">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Catégorie</label>
+                                <select class="form-control">
+                                    <option>Technologie</option>
+                                    <option>Business</option>
+                                    <option>Sport</option>
+                                    <option>Économie</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Auteur</label>
+                                <input type="text" class="form-control" placeholder="Nom de l'auteur">
+                            </div>
+                        </div>
+                        <div class="col">
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" class="form-control" value="${new Date().toISOString().split('T')[0]}">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Extrait</label>
+                        <textarea class="form-control" placeholder="Extrait de l'article"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Image</label>
+                        <input type="file" class="form-control" accept="image/*" onchange="previewImage(this)">
+                        <img src="#" class="preview-image" style="display: none;">
+                    </div>
+                    <button type="button" class="btn btn-danger" onclick="removeNews(this)">Supprimer</button>
+                </div>
+            `;
+            container.insertAdjacentHTML('beforeend', newsHtml);
+        }
+
+        function saveSectors() {
+    const sectors = [];
+    const sectorItems = document.querySelectorAll('#sectors-list .sector-item');
+    
+    sectorItems.forEach(item => {
+        const titleElement = item.querySelector('h4');
+        const descElement = item.querySelector('p');
+        
+        if (titleElement && descElement) {
+            sectors.push({
+                title: titleElement.textContent.trim(),
+                description: descElement.textContent.trim()
+            });
+        }
+    });
+    
+    // Simulation de sauvegarde
+    siteData.sectors = sectors;
+    showSuccessMessage('sectors-success');
+    console.log('Secteurs d\'activité sauvegardés:', sectors);
+}
+
+</script>
