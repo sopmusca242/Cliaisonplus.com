@@ -182,7 +182,7 @@
           </div>
       
           <div class="row">
-            <div class="col-md-4 col-sm-6" >
+            <div class="col-md-4 col-sm-6" id="energie" >
                 <div class="item-holder">
                     <img src="assets/img/energie.jpg" alt="Énergie renouvelable" class="sector-image">
                     <div class="text-content">
@@ -193,7 +193,7 @@
                 </div>
             </div>
         
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-4 col-sm-6" id="bank">
                 <div class="item-holder">
                     <img src="assets/img/bank.jpg" alt="Services bancaires" class="sector-image">
                     <div class="text-content">
@@ -204,7 +204,7 @@
                     </div>
                 </div>
         
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-4 col-sm-6" id="tourisme">
                 <div class="item-holder">
                     <img src="assets/img/tourisme.jpg" alt="Tourisme et voyage" class="sector-image">
                     <div class="text-content">
@@ -215,7 +215,7 @@
                 </div>
             </div>
         
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-4 col-sm-6" id="indust">
                 <div class="item-holder">
                     <img src="assets/img/industrie.jpg" alt="Secteur industriel" class="sector-image">
                     <div class="text-content">
@@ -226,7 +226,7 @@
                 </div>
             </div>
         
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-4 col-sm-6" id="transport">
                 <div class="item-holder">
                     <img src="assets/img/logistic.jpg" alt="Transport et logistique" class="sector-image">
                     <div class="text-content">
@@ -237,7 +237,7 @@
                 </div>
             </div>
         
-            <div class="col-md-4 col-sm-6">
+            <div class="col-md-4 col-sm-6" id="secteur">
                 <div class="item-holder">
                     <img src="assets/img/public.jpg" alt="Administration publique" class="sector-image">
                     <div class="text-content">
@@ -499,7 +499,7 @@
 </section>
 
 <style>
-    /* CSS pour l'animation de défilement des actualités */
+
 
     .site-heading {
         margin-bottom: 50px;
@@ -1109,17 +1109,18 @@
                             <li>
                                 <h4>Adresse de nos bureaux</h4>
                                 <div class="icon"><i class="fas fa-map-marked-alt"></i></div> 
-                                <span>131 rue Massoukou,<br> Moungalie, Brazzaville,<br> Republique du Congo</span>
+                                <span><a href="#">11 rue Lamothe, Ex CCF Immeuble <br>Nkounkou Fils, 2ème étage, Centre ville, <br>Brazzaville-République du Congo</a></span>
                             </li>
                             <li>
                                 <h4>Téléphone</h4>
                                 <div class="icon"><i class="fas fa-phone"></i></div> 
-                                <span>+242-06-800-54-49</span>
+                                <span><a href="tel:+242067553626">+242-06-755-36-26</a><br><a href="tel:+242056332898">+242-05-633-28-98</a></span>
+
                             </li>
                             <li>
                                 <h4>Email</h4>
                                 <div class="icon"><i class="fas fa-envelope-open"></i></div> 
-                                <span>linkByte@link.com</span>
+                                <span><a href="#">cliaisonplus@Consulting.com</a></span>
                             </li>
                         </ul>
                         
@@ -1186,19 +1187,16 @@
                             <h4>Entreprise</h4>
                             <ul>
                                 <li>
-                                    <a href="#">Accueil</a>
+                                    <a href="index.html">Accueil</a>
                                 </li>
                                 <li>
-                                    <a href="#">À propos de nous</a>
+                                    <a href="#features">À propos de nous</a>
                                 </li>
                                 <li>
-                                    <a href="#">Historique de l'entreprise</a>
+                                    <a href="#services">Prestation</a>
                                 </li>
                                 <li>
-                                    <a href="#">Fonctionnalités</a>
-                                </li>
-                                <li>
-                                    <a href="#">Blog</a>
+                                    <a href="#news-section">Actualités</a>
                                 </li>
                             </ul>
                         </div>
@@ -1208,19 +1206,28 @@
                                 <h4>Ressources</h4>
                                 <ul>
                                     <li>
-                                        <a href="#">Carrière</a>
+                                        <a href="#energie">Énergie</a>
                                     </li>
                                     <li>
-                                        <a href="#">Leadership</a>
+                                        <a href="#secteur">Secteur Public</a>
                                     </li>
                                     <li>
-                                        <a href="#">Stratégie</a>
+                                        <a href="#transport">Transport</a>
                                     </li>
                                     <li>
-                                        <a href="#">Services</a>
+                                        <a href="#indust">Industrie</a>
                                     </li>
                                     <li>
-                                        <a href="#">Historique</a>
+                                        <a href="#tourisme">Tourisme</a>
+                                    </li>
+                                    <li>
+                                        <a href="#bank">Banques</a>
+                                    </li>
+                                    <li>
+                                        <a href="#transport">Logistique</a>
+                                    </li>
+                                    <li>
+                                        <a href="#bank">Assurances</a>
                                     </li>
                                 </ul>
                             </div>
@@ -1241,7 +1248,7 @@
                                         </div>
                                         <div class="info">
                                             <h5>Email:</h5>
-                                            <span>LinkByte.cg@gmail.com</span>
+                                            <span><a href="#">cliaisonplus@Consulting.com</a></span>
                                         </div>
                                     </li>
                                     <li>
@@ -1250,7 +1257,7 @@
                                         </div>
                                         <div class="info">
                                             <h5>Téléphone:</h5>
-                                            <span>+242-06-800-54-49</span>
+                                            <span><a href="tel:+242067553626">+242-06-755-36-26</a><br><a href="tel:+242056332898">+242-05-633-28-98</a></span>
                                         </div>
                                     </li>
                                 </ul>
@@ -1260,24 +1267,21 @@
                 </div>
             </div>
         </div>
-        <!-- Start Footer Bottom -->
+
         <div class="footer-bottom">
             <div class="container">
                 <div class="row">
                     <div class="col-md-12">
                         <div class="col-md-6">
-                            <p>&copy; Copyright 2025. Tous droits réservés par<a href="#">LinkByte</a></p>
+                            <p>Copyright 2025. Tous droits réservés par<a href="index.html"> Cliaisonplus</a></p>
                         </div>
                         <div class="col-md-6 text-right link">
                             <ul>
                                 <li>
-                                    <a href="#">Conditions d'utilisation</a>
-                                </li>
-                                <li>
                                     <a href="#">Politique de confidentialité</a>
                                 </li>
                                 <li>
-                                    <a href="#">Support</a>
+                                    <a href="">Support</a>
                                 </li>  
                                 <li>
                               </li>                              
